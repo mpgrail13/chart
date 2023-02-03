@@ -1,0 +1,100 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ .Values.configmap.index_name }}
+data:
+  index.html: |
+    <html>
+    <head>
+    <title>Welcome to nginx!</title>
+    <style>
+    html { color-scheme: light dark; }
+    body { width: 35em; margin: 0 auto;
+    font-family: Tahoma, Verdana, Arial, sans-serif; }
+    </style>
+    </head>
+    <body>
+    <h1>Welcome to nginx!</h1>
+    <p>If you see this page, the nginx web server is successfully installed and
+    working.</p>
+    <p>If you want to see page on different port press
+    <a href="http://playsdevtask25.ddns.net:32000/page2:1234">
+            <button class="btn btn-primary btn-lg">here</button></a>.<br/>
+    <p>If you want to download a song press
+    <a href="http://playsdevtask25.ddns.net:32000/music">
+            <button class="btn btn-primary btn-lg">here</button></a>.<br/>
+    <p>If you want to see PHP server info press
+    <a href="http://playsdevtask25.ddns.net:32000/info.php">
+            <button class="btn btn-primary btn-lg">here</button></a>.<br/>
+    <p>If you want to see another server press
+    <a href="http://playsdevtask25.ddns.net:32000/secondserver">
+            <button class="btn btn-primary btn-lg">here</button></a>.<br/>
+    <p>If you want to see RedBlue press
+    <a href="http://playsdevtask25.ddns.net:32000/redblue">
+            <button class="btn btn-primary btn-lg">here</button></a>.<br/>
+    <p>If you want to see first image press
+    <a href="http://playsdevtask25.ddns.net:32000/image1">
+            <button class="btn btn-primary btn-lg">here</button></a>.<br/>
+    <p>If you want to see second image press
+    <a href="http://playsdevtask25.ddns.net:32000/image2">
+            <button class="btn btn-primary btn-lg">here</button></a>.<br/>
+    </body>
+    </html>
+
+---
+
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ .Values.configmap.nginx_name }}
+data:
+  nginx.conf: |
+    load_module modules/ngx_http_image_filter_module.so;
+
+    events {}
+    http {
+        upstream redblue_servers {
+         server 127.0.0.1:8888;
+         server 127.0.0.1:9999;
+        }
+        server {
+         root /usr/share/nginx/html/red;
+         listen 8888;
+        }
+        server {
+         root /usr/share/nginx/html/blue;
+         listen 9999;
+        }
+        server{
+         root /usr/share/nginx/html;
+         listen 1234;
+         listen 80;
+         location /page2:1234 {
+           proxy_pass 'http://127.0.0.1:1234/';
+          }
+                   location /music {
+          add_header Content-disposition "attachment; filename=$1";
+          default_type application/octet-stream;
+          proxy_pass 'http://127.0.0.1/song.mp3';
+         }
+         location /info.php {
+          root /var/www/html;
+          proxy_pass 'http://127.0.0.1:8080/info.php/';
+         }
+         location /secondserver {
+          proxy_pass 'https://github.com/';
+         }
+         location /redblue {
+          proxy_pass http://redblue_servers/;
+         }
+         location /image1 {
+          image_filter rotate 90;
+          root /usr/share/nginx/html;
+          try_files $uri.png =404;
+         }
+         location /image2 {
+          root /usr/share/nginx/html;
+          try_files $uri.png =404;
+         }
+        }
+    }

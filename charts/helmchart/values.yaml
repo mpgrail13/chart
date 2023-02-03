@@ -1,0 +1,25 @@
+deployment:
+  name: site
+  labels: site
+  nginx_image: mpgrail/task28:nginx
+  apache_image: mpgrail/task28:apache
+  nginx_port: 80
+  apache_port:
+  limit_cpu: 300m
+  request_cpu: 100m
+
+service:
+  name: site-service
+  namespace: default
+  type: NodePort
+  port: 32000
+
+configmap:
+  index_name: index
+  nginx_name: nginx-conf
+
+hpa:
+  kind: Deployment
+  min: 1
+  max: 2
+  avg: 40

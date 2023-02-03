@@ -1,0 +1,56 @@
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.deployment.name }}
+  labels:
+    app: {{ .Values.deployment.labels }}
+spec:
+  selector:
+    matchLabels:
+      app: {{ .Values.deployment.labels }}
+  template:
+    metadata:
+      labels:
+        app: {{ .Values.deployment.labels }}
+    spec:
+      containers:
+        - name: nginx
+          image: {{ .Values.deployment.nginx_image }}
+          ports:
+            - containerPort: {{ .Values.deployment.nginx_port }}
+          resources:
+            limits:
+              cpu: {{ .Values.deployment.limit_cpu }}
+            requests:
+              cpu: {{ .Values.deployment.request_cpu }}
+          volumeMounts:
+            - name: {{ .Values.configmap.nginx_name }}
+              mountPath: /etc/nginx/nginx.conf
+              subPath: nginx.conf
+              readOnly: true
+            - name: {{ .Values.configmap.index_name }}
+              mountPath: /usr/share/nginx/html/index.html
+              subPath: index.html
+              readOnly: true
+        - name: apache
+          image: {{ .Values.deployment.apache_image }}
+          ports:
+            - containerPort: {{ .Values.deployment.apache_port }}
+          resources:
+            limits:
+              cpu: {{ .Values.deployment.limit_cpu }}
+            requests:
+              cpu: {{ .Values.deployment.request_cpu }}
+
+      volumes:
+          - name: {{ .Values.configmap.nginx_name }}
+            configMap:
+              name: {{ .Values.configmap.nginx_name }}
+              items:
+                - key: nginx.conf
+                  path: nginx.conf
+          - name: {{ .Values.configmap.index_name }}
+            configMap:
+              name: {{ .Values.configmap.index_name }}
