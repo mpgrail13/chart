@@ -4,7 +4,7 @@ deployment:
   nginx_image: mpgrail/task28:nginx
   apache_image: mpgrail/task28:apache
   nginx_port: 80
-  apache_port:
+  apache_port: 8080
   limit_cpu: 300m
   request_cpu: 100m
 
