@@ -1,42 +1,22 @@
 deployment:
-    name: ENC[AES256_GCM,data:YftDTA==,iv:vnK8Iz17zMJ/an65wCelbqg+x4cvEFZskx1NBsuhW0A=,tag:wvzjpqXWr0+qRv/l/65ROQ==,type:str]
-    labels: ENC[AES256_GCM,data:vN+YXg==,iv:btUFB2Vs7P7L0SUlUBWaL2hyap1CECfthyUDmSZ0jTc=,tag:g9ez+Yw1cwOg1dziICq6AA==,type:str]
-    nginx_image: ENC[AES256_GCM,data:tSAU7vOu+Z0BlQIDiHNBvqMggJg=,iv:0pGbBMTb71GCwJ4Hr8leHyxEn36IV/y7qCgKwlm0Ogs=,tag:A8uGPOosG2D4uDZs9J5zJQ==,type:str]
-    apache_image: ENC[AES256_GCM,data:JB/FOWpYu2V+inPaeCYsIPP8JDFE,iv:RfVnnHGvZrUZvJ3+bZ1Qls9sDi5Po4rUiw07fCPL4Sw=,tag:jiX4M2E3QVPxEI0p2NLMag==,type:str]
-    nginx_port: ENC[AES256_GCM,data:MEo=,iv:qzq98ti1hwIr1xpU+dODdNG44m/2bX14agDtKSSg6LQ=,tag:0DKBK/FFZPjJUpJqGaiHjQ==,type:int]
-    apache_port: ENC[AES256_GCM,data:BgCvMw==,iv://P2olQLfRvPdIo+e3T2oLIowoln0SiKMzRe6PIumaw=,tag:tjfwsRm2d2rXJFRQHyYpwg==,type:int]
-    limit_cpu: ENC[AES256_GCM,data:mLAkdw==,iv:NETghpsXq3wti+MOImEWo6hdjSxMetrXDDpSZwJLOWY=,tag:CD0Nz2vnPvQcRMkhXOjxww==,type:str]
-    request_cpu: ENC[AES256_GCM,data:441hUQ==,iv:0Fu51qhAGtItS2/xcqEqIhLOH82eDfcwGgO8pqPMbh8=,tag:SXtlqkYJk/HByCbl05kWDA==,type:str]
+    name: site
+    labels: site
+    nginx_image: mpgrail/task28:nginx
+    apache_image: mpgrail/task28:apache
+    nginx_port: 80
+    apache_port: 8080
+    limit_cpu: 300m
+    request_cpu: 100m
 service:
-    name: ENC[AES256_GCM,data:aEbaH+h9e6b1qpQI,iv:FeVSQFpIKyi6K0pentFQm6xWRFsZtB5hhIZvM+1twM0=,tag:2CPFMH9MCTQ18NajcqTdzQ==,type:str]
-    namespace: ENC[AES256_GCM,data:z3nbG5MXxA==,iv:MvtUPrTk6eH6k6sRe/nmMxjITm3jUEgzZd4aCyXfA3g=,tag:NN4C9mHy0gzq8g3oN5byWA==,type:str]
-    type: ENC[AES256_GCM,data:jriEB2yxe+0=,iv:h6JDODG2kdf6JUPa6RF4Ykg86ROVUOJE4xZA0rLxhck=,tag:zu7hGVvjSzVT4G2SRmQB+A==,type:str]
-    port: ENC[AES256_GCM,data:fG/mR8E=,iv:DYm2w2hVF5lTQISMoE/o+IZuwK9qBUsgH9HZ18RW6QA=,tag:YsOH3WKiWFBclBo5s89fTQ==,type:int]
+    name: site-service
+    namespace: default
+    type: NodePort
+    port: 32000
 configmap:
-    index_name: ENC[AES256_GCM,data:18nJHoM=,iv:zfubvYezspkSlGdwXQYm7Cu/tFuoIQosKs7cezLm7cI=,tag:3I7WY+vZ+lfsDsIYycwg8g==,type:str]
-    nginx_name: ENC[AES256_GCM,data:5MsDJPeGTiAkJg==,iv:ljN6bnG+DsnqQXmHFEmV/slshGrely3KFzybhwcd+wY=,tag:nvlKqLJjYIl92b+7lejPNA==,type:str]
+    index_name: index
+    nginx_name: nginx-conf
 hpa:
-    kind: ENC[AES256_GCM,data:J6wJZ8LUviv6jg==,iv:ZIv0DnVNjlUfCckSIZdgxwpM44BRwV/Nk5GAXI4k2Ks=,tag:z90c44GuU8x5uokgFQL+tw==,type:str]
-    min: ENC[AES256_GCM,data:ag==,iv:1GfvNRR32pj5fd6fefBe5zVY6DF0pU4YtR5DUs5WtzY=,tag:3Eh6+wlbkwwLUrKtl0nS9Q==,type:int]
-    max: ENC[AES256_GCM,data:4A==,iv:Lk2WDq5u3XXxhKJebva7514WmYh9mx0e9Pyq8ZHxQTs=,tag:HxFWV0cUzHCxA0Hm0YpWPg==,type:int]
-    avg: ENC[AES256_GCM,data:R3M=,iv:SOISuZOoZmbgM1NY8BzHE5cu/UGqWXarqrdqfDAgUmE=,tag:4Qy80/umgYq+YLGSVqOgfA==,type:int]
-sops:
-    kms: []
-    gcp_kms: []
-    azure_kv: []
-    hc_vault: []
-    age:
-        - recipient: age10zaxnc7qgkwdju5tfqgnz90j82xmk6qa03g4dfys249sf7caaygq5chk83
-          enc: |
-            -----BEGIN AGE ENCRYPTED FILE-----
-            YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBzc3FlNVN3UWwvZ1JQY0FR
-            aGg5MHlTU1YyYi9rWm9COGx6Rk5RN1B3Y1Z3Cm5xNzdTUUN6aXNnQ3lCdFJoeWpX
-            RGNmbUljaExsS2EyajROanFDdWQ4YmcKLS0tIGdOV1E5SHZHQnNEYUpZbVVibnRh
-            NDhqOStwY0xZZ0RNTEdoNE9SM1lwUEkK7eYG7c+lWsRsxJEzWD4ErH79f4lUPdLh
-            abVDfIWlGwhsYy0Ii4SCL5oPTwjj1f0xOW3E1ugRRE6p8v6xWVP92w==
-            -----END AGE ENCRYPTED FILE-----
-    lastmodified: "2023-02-05T18:26:42Z"
-    mac: ENC[AES256_GCM,data:ODha7gVLLW/lOaIc6lUtApPKw5oVzjuX+ToXc0ki3CTmkoaZPNB5hfq5+FLKW6XDI77c8pwLlkru2m1V82Xkd4Img+0WmsqNhTuWO3AISG/VWAOruLk49CcAu0f7kIR07BlzGZqRwg1N2aslNUoWMQjESRT4VWO6JsxpRtuPVoU=,iv:y0H32HCZXX34Qov2K/DaofUsBVqTWbV50LMLkLNt4e8=,tag:uBCVinke7UNIkWPQPw1ABw==,type:str]
-    pgp: []
-    unencrypted_suffix: _unencrypted
-    version: 3.7.3
+    kind: Deployment
+    min: 1
+    max: 3
+    avg: 40
